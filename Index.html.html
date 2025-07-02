@@ -1,0 +1,181 @@
+
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="UTF-8">
+  <title>مسابقة أبو بيان</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <style>
+    body {
+      background-color: #b0e0e6;
+      font-family: 'Arial', sans-serif;
+      margin: 0;
+      padding: 15px;
+      box-sizing: border-box;
+    }
+    .marquee, #footer {
+      color: red;
+      font-weight: bold;
+      font-size: 22px;
+      white-space: nowrap;
+      overflow: hidden;
+      animation: slideRight 10s linear infinite;
+      text-align: center;
+      margin-bottom: 15px;
+    }
+    @keyframes slideRight {
+      from { transform: translateX(-100%); }
+      to { transform: translateX(100%); }
+    }
+    #quiz-box {
+      background: white;
+      padding: 18px;
+      border-radius: 14px;
+      max-width: 100%;
+      margin: 0 auto 20px auto;
+      box-shadow: 0 0 10px rgba(0,0,0,0.15);
+    }
+    #nameInput {
+      width: 100%;
+      padding: 14px;
+      font-size: 18px;
+      margin: 12px 0;
+      border-radius: 8px;
+      border: 1px solid #ccc;
+      box-sizing: border-box;
+    }
+    .option {
+      display: block;
+      background-color: #4CAF50;
+      color: white;
+      font-weight: bold;
+      border: none;
+      border-radius: 10px;
+      padding: 16px;
+      margin: 12px 0;
+      font-size: 18px;
+      cursor: pointer;
+      transition: 0.3s;
+      width: 100%;
+      box-sizing: border-box;
+    }
+    .option:hover {
+      background-color: #45a049;
+    }
+    button {
+      background-color: #0077cc;
+      color: white;
+      border: none;
+      padding: 16px;
+      font-size: 18px;
+      border-radius: 10px;
+      cursor: pointer;
+      margin: 20px 0;
+      width: 100%;
+      box-sizing: border-box;
+    }
+    button:hover {
+      background-color: #005fa3;
+    }
+    #result {
+      margin-top: 20px;
+      font-size: 17px;
+      background-color: #fff;
+      padding: 14px;
+      border-radius: 10px;
+    }
+    @media screen and (max-width: 600px) {
+      .marquee, #footer {
+        font-size: 20px;
+      }
+      #nameInput, .option, button {
+        font-size: 17px;
+        padding: 14px;
+      }
+      #quiz-box {
+        padding: 14px;
+      }
+      #result {
+        font-size: 16px;
+      }
+    }
+  </style>
+</head>
+<body>
+<div class="marquee">مرحباً بكم في مسابقة أبو بيان</div>
+<input type="text" id="nameInput" placeholder="أدخل اسم المتسابق">
+<div id="quiz-box">
+  <h3 id="question"></h3>
+  <div id="options"></div>
+</div>
+<button onclick="showResults()">عرض النتيجة</button>
+<div id="result"></div>
+<div id="footer" class="marquee">تصميم وبرمجة أبو بيان</div>
+<script>
+  const questions = [
+    { q: "ما عاصمة السعودية؟", options: ["الرياض", "جدة", "مكة", "الدمام"], answer: 0 },
+    { q: "كم عدد أركان الإسلام؟", options: ["3", "4", "5", "6"], answer: 2 },
+    { q: "من هو خاتم الأنبياء؟", options: ["عيسى", "موسى", "محمد", "إبراهيم"], answer: 2 },
+    { q: "ما هي أول سورة في القرآن؟", options: ["الكوثر", "الفاتحة", "البقرة", "الناس"], answer: 1 },
+    { q: "كم عدد الصلوات المفروضة؟", options: ["ثلاث", "أربع", "خمس", "سبع"], answer: 2 },
+    { q: "من هو أول خليفة في الإسلام؟", options: ["عمر", "عثمان", "علي", "أبو بكر"], answer: 3 },
+    { q: "أين يقع المسجد الأقصى؟", options: ["المدينة", "مكة", "القدس", "عمان"], answer: 2 },
+    { q: "ما اسم نهر في الجنة؟", options: ["الفرات", "الكوثر", "النيل", "دجلة"], answer: 1 },
+    { q: "كم عدد سور القرآن؟", options: ["114", "100", "120", "99"], answer: 0 },
+    { q: "ما اسم أم النبي محمد؟", options: ["آمنة", "خديجة", "فاطمة", "عائشة"], answer: 0 },
+    { q: "ما الحيوان الذي تكلم في القرآن؟", options: ["النملة", "الناقة", "الثعبان", "الحمار"], answer: 3 },
+    { q: "من هو أول نبي؟", options: ["نوح", "آدم", "إبراهيم", "إدريس"], answer: 1 },
+    { q: "كم عدد أشهر الحرم؟", options: ["4", "5", "6", "7"], answer: 0 },
+    { q: "من بنى الكعبة؟", options: ["محمد", "موسى", "إبراهيم وإسماعيل", "آدم"], answer: 2 },
+    { q: "ما أعظم آية في القرآن؟", options: ["آية الكرسي", "الفاتحة", "النور", "الرحمن"], answer: 0 },
+    { q: "من هو الملك الموكل بالمطر؟", options: ["ميكائيل", "جبريل", "مالك", "عزرائيل"], answer: 0 },
+    { q: "ما اسم والد النبي؟", options: ["عبدالله", "عبدالمطلب", "أبو طالب", "حارث"], answer: 0 },
+    { q: "ما أول ما خلق الله؟", options: ["العرش", "القلم", "النور", "الماء"], answer: 1 },
+    { q: "كم مرة ذكرت الصلاة في القرآن؟", options: ["100", "20", "60", "أكثر من 80"], answer: 3 },
+    { q: "من هو النبي الذي ابتلعه الحوت؟", options: ["يونس", "عيسى", "نوح", "موسى"], answer: 0 },
+  ];
+  let current = 0;
+  let score = 0;
+  let answers = [];
+  function showQuestion() {
+    if (current >= questions.length) {
+      document.getElementById("quiz-box").innerHTML = `
+        <h2>تمت الإجابة على جميع الأسئلة</h2>
+        <p>اضغط على "عرض النتيجة" لرؤية التفاصيل</p>
+      `;
+      return;
+    }
+    const q = questions[current];
+    document.getElementById("question").innerText = `السؤال ${current + 1}: ${q.q}`;
+    const optionsDiv = document.getElementById("options");
+    optionsDiv.innerHTML = "";
+    q.options.forEach((opt, idx) => {
+      const btn = document.createElement("button");
+      btn.innerText = opt;
+      btn.className = "option";
+      btn.onclick = () => {
+        if (idx === q.answer) score++;
+        answers.push({ question: q.q, selected: opt, correct: q.options[q.answer] });
+        current++;
+        showQuestion();
+      };
+      optionsDiv.appendChild(btn);
+    });
+  }
+  function showResults() {
+    const name = document.getElementById("nameInput").value || "بدون اسم";
+    let resultText = `<h3>الاسم: ${name}</h3>`;
+    resultText += `<p>النتيجة: ${score} من ${questions.length}</p>`;
+    resultText += "<h4>تفاصيل الإجابات:</h4><ul>";
+    answers.forEach((a, i) => {
+      const isCorrect = a.selected === a.correct;
+      resultText += `<li>س${i+1}: ${a.question}<br>إجابتك: <b>${a.selected}</b> ${isCorrect ? '✅' : '❌'}<br>الإجابة الصحيحة: ${a.correct}</li><br>`;
+    });
+    resultText += "</ul>";
+    document.getElementById("result").innerHTML = resultText;
+    localStorage.setItem("lastQuizResult", JSON.stringify({ name, score, answers }));
+  }
+  showQuestion();
+</script>
+</body>
+</html>
